@@ -38,16 +38,19 @@ This writes:
 
 ## HPC usage
 
-1. Edit variables in `hpc/pdf_to_md.sh`:
-   - `INPUT_PDF`
-   - `OUTPUT_DIR`
-   - `ENV_PREFIX`
-
-2. Submit:
+1. Submit with environment overrides:
 
 ```bash
+INPUT_PDF=/work/<user>/papers/paper.pdf \
+OUTPUT_DIR=/work/<user>/outputs/mineru_paper \
+ENV_PREFIX=/work/<user>/conda/envs/pdfllm_clean \
 sbatch hpc/pdf_to_md.sh
 ```
+
+2. Optional overrides:
+  - `MINERU_BACKEND` (default: `hybrid-engine`)
+  - `MINERU_EFFORT` (default: `high`)
+  - `CACHE_ROOT`, `TMP_ROOT`, `MPL_ROOT`
 
 ## Notes
 
