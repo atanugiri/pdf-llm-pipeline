@@ -12,53 +12,42 @@
 
 set -euo pipefail
 
-WORK_ROOT="${WORK:-$HOME}"
+if [[ -z "${WORK:-}" ]]; then
+  echo "ERROR: WORK is not set in the job environment" >&2
+  exit 1
+fi
 
-# Override these when submitting, e.g.:
-# INPUT_PDF=/work/.../paper.pdf OUTPUT_DIR=/work/.../out ENV_PREFIX=/work/.../env sbatch hpc/pdf_to_md.sh
-INPUT_PDF="${INPUT_PDF:-$WORK_ROOT/pdfs/input.pdf}"
-OUTPUT_DIR="${OUTPUT_DIR:-$WORK_ROOT/pdf_outputs/mineru_fullpdf}"
-ENV_PREFIX="${ENV_PREFIX:-$WORK_ROOT/conda/envs/pdfllm_clean}"
-MINERU_BACKEND="${MINERU_BACKEND:-hybrid-engine}"
-MINERU_EFFORT="${MINERU_EFFORT:-high}"
+REPO_DIR="$WORK/pdf-llm-pipeline"
+CONDA_ENV_NAME=pdfllm_clean
 
-CACHE_ROOT="${CACHE_ROOT:-$WORK_ROOT/.cache}"
-TMP_ROOT="${TMP_ROOT:-$WORK_ROOT/tmp}"
-MPL_ROOT="${MPL_ROOT:-$WORK_ROOT/mplconfig}"
+INPUT_PDF="$REPO_DIR/pdfs/AM_Nature.pdf"
+OUTPUT_DIR="$REPO_DIR/pdfs"
+MINERU_BACKEND="hybrid-engine"
+MINERU_EFFORT="medium"
 
-mkdir -p "$OUTPUT_DIR" "$CACHE_ROOT" "$TMP_ROOT" "$MPL_ROOT"
+export XDG_CACHE_HOME="$WORK/pip-cache"
+export HF_HOME="$WORK/pip-cache/huggingface"
+export MPLCONFIGDIR="$WORK/mplconfig"
+export TMPDIR="$WORK/tmp"
+export TMP="$WORK/tmp"
+export TEMP="$WORK/tmp"
 
-export XDG_CACHE_HOME="$CACHE_ROOT"
-export HF_HOME="$CACHE_ROOT/huggingface"
-export MPLCONFIGDIR="$MPL_ROOT"
-export TMPDIR="$TMP_ROOT"
-export TMP="$TMP_ROOT"
-export TEMP="$TMP_ROOT"
+mkdir -p "$OUTPUT_DIR" "$WORK/pip-cache" "$WORK/tmp" "$WORK/mplconfig"
 
-echo "Host: $(hostname)"
-echo "Date: $(date)"
-echo "Input: $INPUT_PDF"
-echo "Output: $OUTPUT_DIR"
-echo "Env: $ENV_PREFIX"
-echo "Backend: $MINERU_BACKEND"
-echo "Effort: $MINERU_EFFORT"
+source "$HOME/miniconda3/etc/profile.d/conda.sh"
+conda activate "$CONDA_ENV_NAME"
 
 if [[ ! -f "$INPUT_PDF" ]]; then
   echo "ERROR: INPUT_PDF not found: $INPUT_PDF" >&2
   exit 1
 fi
 
-if [[ ! -d "$ENV_PREFIX" ]]; then
-  echo "ERROR: ENV_PREFIX directory not found: $ENV_PREFIX" >&2
+if ! conda env list | grep -q "$CONDA_ENV_NAME"; then
+  echo "ERROR: Conda environment not found: $CONDA_ENV_NAME" >&2
   exit 1
 fi
 
-if ! command -v conda >/dev/null 2>&1; then
-  echo "ERROR: conda command not found in PATH" >&2
-  exit 1
-fi
-
-conda run -p "$ENV_PREFIX" mineru \
+mineru \
   -p "$INPUT_PDF" \
   -o "$OUTPUT_DIR" \
   -b "$MINERU_BACKEND" \

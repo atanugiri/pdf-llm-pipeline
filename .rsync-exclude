@@ -1,0 +1,41 @@
+# VCS
+.git/
+.gitignore
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache/build
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local temporary/cache files
+.cache/
+tmp/
+*.tmp
+
+# Optional large/generated artifacts
+# Uncomment if needed:
+# *.pdf
+# *.log

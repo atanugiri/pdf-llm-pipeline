@@ -54,5 +54,9 @@ htmlcov/
 
 # Generated files
 *.tmp
+
 # Uncomment if you want to ignore PDFs, but be careful with documentation
-# *.pdf
+*.pdf
+!README.md
+*md
+*json
