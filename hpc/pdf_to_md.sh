@@ -21,7 +21,7 @@ REPO_DIR="$WORK/pdf-llm-pipeline"
 CONDA_ENV_NAME=pdfllm_clean
 
 INPUT_PDF="$REPO_DIR/pdfs/AM_Nature.pdf"
-OUTPUT_DIR="$REPO_DIR/pdfs"
+OUTPUT_DIR="$REPO_DIR/pdf_outputs"
 MINERU_BACKEND="hybrid-engine"
 MINERU_EFFORT="medium"
 

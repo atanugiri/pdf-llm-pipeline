@@ -1,0 +1,12 @@
+[project]
+name = "pdf-llm-pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=1.14.0",
+    "mineru==3.4.0",
+    "pix2text==1.1.6",
+    "pymupdf4llm==1.28.0",
+]
