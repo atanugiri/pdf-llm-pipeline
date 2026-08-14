@@ -1,9 +1,0 @@
-name: pdfllm_clean
-channels:
-  - https://repo.anaconda.com/pkgs/main
-  - https://repo.anaconda.com/pkgs/r
-dependencies:
-  - numpy
-  - pip
-  - python=3.10
-prefix: /Users/atanugiri/miniconda3/envs/pdfllm_clean
