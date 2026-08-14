@@ -18,7 +18,7 @@ if [[ -z "${WORK:-}" ]]; then
 fi
 
 REPO_DIR="$WORK/pdf-llm-pipeline"
-CONDA_ENV_NAME=pdfllm_clean
+ENV_PREFIX="${ENV_PREFIX:-$REPO_DIR/.venv}"
 
 INPUT_PDF="$REPO_DIR/pdfs/AM_Nature.pdf"
 OUTPUT_DIR="$REPO_DIR/pdf_outputs"
@@ -28,26 +28,25 @@ MINERU_EFFORT="medium"
 export XDG_CACHE_HOME="$WORK/pip-cache"
 export HF_HOME="$WORK/pip-cache/huggingface"
 export MPLCONFIGDIR="$WORK/mplconfig"
+export TRITON_CACHE_DIR="$WORK/triton-cache"
 export TMPDIR="$WORK/tmp"
 export TMP="$WORK/tmp"
 export TEMP="$WORK/tmp"
 
-mkdir -p "$OUTPUT_DIR" "$WORK/pip-cache" "$WORK/tmp" "$WORK/mplconfig"
-
-source "$HOME/miniconda3/etc/profile.d/conda.sh"
-conda activate "$CONDA_ENV_NAME"
+mkdir -p "$OUTPUT_DIR" "$WORK/pip-cache" "$WORK/tmp" "$WORK/mplconfig" "$WORK/triton-cache"
 
 if [[ ! -f "$INPUT_PDF" ]]; then
   echo "ERROR: INPUT_PDF not found: $INPUT_PDF" >&2
   exit 1
 fi
 
-if ! conda env list | grep -q "$CONDA_ENV_NAME"; then
-  echo "ERROR: Conda environment not found: $CONDA_ENV_NAME" >&2
+if [[ ! -x "$ENV_PREFIX/bin/mineru" ]]; then
+  echo "ERROR: MinerU executable not found: $ENV_PREFIX/bin/mineru" >&2
+  echo "Run 'uv sync --locked' from $REPO_DIR before submitting this job." >&2
   exit 1
 fi
 
-mineru \
+"$ENV_PREFIX/bin/mineru" \
   -p "$INPUT_PDF" \
   -o "$OUTPUT_DIR" \
   -b "$MINERU_BACKEND" \
