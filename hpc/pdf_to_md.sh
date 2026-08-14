@@ -20,8 +20,8 @@ fi
 REPO_DIR="$WORK/pdf-llm-pipeline"
 ENV_PREFIX="${ENV_PREFIX:-$REPO_DIR/.venv}"
 
-INPUT_PDF="$REPO_DIR/pdfs/AM_Nature.pdf"
-OUTPUT_DIR="$REPO_DIR/pdf_outputs"
+INPUT_PDF="$REPO_DIR/pdfs/AM_Nat_comm/AM_Nat_comm.pdf"
+OUTPUT_DIR="$REPO_DIR/pdfs/AM_Nat_comm"
 MINERU_BACKEND="hybrid-engine"
 MINERU_EFFORT="medium"
 
